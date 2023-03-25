@@ -18,7 +18,7 @@ class Logger(logging.Logger):
     Args:
         name: name of the logger
         level: minimum log level of log statements that are logged
-        formatter: Format for the log messages: default is <time - name - [level] - message>
+        formatter: Format for the log messages: defaults to <time - name - [level] - message>
     """
 
     def __init__(
