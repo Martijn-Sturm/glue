@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "glue"
+version = "0.1.0"
+description = "A library containing multiple helper and utility functionalities for AWS Glue"
+authors = ["Martijn Sturm <martijn.sturm@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
