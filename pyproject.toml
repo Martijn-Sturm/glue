@@ -18,6 +18,9 @@ flake8 = "^6.0.0"
 
 [tool.poetry.group.test.dependencies]
 aws-glue-libs = { git = "https://github.com/awslabs/aws-glue-libs.git", rev = "v4.0" }
+pytest = "^7.2.2"
+pytest-mock = "^3.10.0"
+pyspark = "^3.3.2"
 
 [build-system]
 requires = ["poetry-core"]
