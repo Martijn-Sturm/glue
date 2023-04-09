@@ -19,9 +19,11 @@ def parse_arguments_to_dict(
 
 class Arguments(typing.Protocol):
     """Interface for Glue job argument dataclasses.
-    Can be implemented by defining a dataclass that inherrits from this protocol.
-    The Dataclass can be instantiated by running dataclass.from_glue_arguments() inside
-    an AWS Glue job."""
+    Can be implemented by defining a dataclass that inherrits
+    from this protocol.
+    The Dataclass can be instantiated by running
+    dataclass.from_glue_arguments() insidevan AWS Glue job.
+    """
 
     __dataclass_fields__: typing.ClassVar[typing.Dict]
 
@@ -45,12 +47,15 @@ class Arguments(typing.Protocol):
     @classmethod
     def from_glue_arguments(cls):
         return cls.from_dict(
-            parse_arguments_to_dict(cls._field_names(), cls._get_builtin_keys())
+            parse_arguments_to_dict(
+                cls._field_names(), cls._get_builtin_keys()
+            )
         )
 
 
 @dataclasses.dataclass(kw_only=True)
 class BaseJobArguments(Arguments):
-    """Implementation of Arguments, with just the builtin 'JOB_NAME' argument"""
+    """Implementation of Arguments, with just the builtin
+    'JOB_NAME' argument"""
 
     JOB_NAME: str

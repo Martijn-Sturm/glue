@@ -13,16 +13,21 @@ class LogLevel(enum.Enum):
 
 
 class Logger(logging.Logger):
-    """Logger for AWS glue that puts the logs into the 'output' cloudwatch logs of a Glue job.
+    """Logger for AWS glue that puts the logs into the 'output'
+    cloudwatch logs of a Glue job.
 
     Args:
         name: name of the logger
         level: minimum log level of log statements that are logged
-        formatter: Format for the log messages: defaults to <time - name - [level] - message>
+        formatter: Format for the log messages: defaults to
+            <time - name - [level] - message>
     """
 
     def __init__(
-        self, name: str, level: LogLevel, formatter: typing.Optional[logging.Formatter]
+        self,
+        name: str,
+        level: LogLevel,
+        formatter: typing.Optional[logging.Formatter],
     ) -> None:
         super().__init__(name, level.value)
         self._configure(formatter)
