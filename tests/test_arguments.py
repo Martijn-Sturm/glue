@@ -1,11 +1,14 @@
 import pytest
 import typing
-from glue import arguments
+from glue_helper_lib import arguments
 import dataclasses
 
 
 def mock_glue_resolved_arguments(mocker, return_dict: typing.Dict[str, str]):
-    mocker.patch("glue.arguments.parse_arguments_to_dict", return_value=return_dict)
+    mocker.patch(
+        "glue_helper_lib.arguments.parse_arguments_to_dict",
+        return_value=return_dict,
+    )
 
 
 def test_arguments_succeeds(mocker):
@@ -20,7 +23,9 @@ def test_arguments_succeeds(mocker):
 
 
 def test_arguments_succeeds_with_builtin_argument(mocker):
-    mock_glue_resolved_arguments(mocker, {"JOB_NAME": "name", "custom_option": "value"})
+    mock_glue_resolved_arguments(
+        mocker, {"JOB_NAME": "name", "custom_option": "value"}
+    )
 
     @dataclasses.dataclass
     class TstArguments(arguments.Arguments):
