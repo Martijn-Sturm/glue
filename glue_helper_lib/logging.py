@@ -27,7 +27,7 @@ class Logger(logging.Logger):
         self,
         name: str,
         level: LogLevel,
-        formatter: typing.Optional[logging.Formatter],
+        formatter: typing.Optional[logging.Formatter] = None,
     ) -> None:
         super().__init__(name, level.value)
         self._configure(formatter)
