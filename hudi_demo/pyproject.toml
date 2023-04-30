@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "hudi-demo"
+version = "0.1.0"
+description = ""
+authors = ["Martijn Sturm <martijn.sturm@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+aws-cdk-lib = "^2.77.0"
+constructs = "^10.2.11"
+datalake-cdk = { git = "https://github.com/Martijn-Sturm/datalake-lib.git", subdirectory = "datalake_cdk" }
+
+[tool.poetry.group.dev.dependencies]
+poetry = "^1.4.2"
+glue-helper-lib = "^0.2.0"
+pyspark = "^3.4.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
