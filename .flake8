@@ -1,0 +1,19 @@
+[flake8]
+; extend-ignore = E203
+; Black's max line length:
+max-line-length = 88
+exclude =
+    .git,
+    __pycache__,
+    build,
+    dist,
+    venv,
+    scripts/dockerf.py
+    # too many long lines
+    parameters/parameters/upsert/production.py
+ignore = 
+    E501, 
+    # https://www.flake8rules.com/rules/W503.html
+    W503,
+    E203
+max-complexity = 5
