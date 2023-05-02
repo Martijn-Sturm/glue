@@ -5,9 +5,12 @@ from awsglue.context import GlueContext  # type: ignore
 
 class HudiGlueSession:
     def __init__(self) -> None:
-        self.spark_session: SparkSession = self._set_spark()
-        self.spark_context = self.spark_session.sparkContext
-        self.glue_context = GlueContext(self.spark_context)
+        self._spark_session: SparkSession = self._set_spark()
+        self._spark_context = self._spark_session.sparkContext
+        self._glue_context = GlueContext(self._spark_context)
+
+    def get_spark_session(self):
+        return self._spark_session
 
     def _set_spark(self) -> SparkSession:
         conf_list = self._get_conf_list()

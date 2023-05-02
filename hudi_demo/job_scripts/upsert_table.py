@@ -34,7 +34,7 @@ SCHEMA = spark_types.StructType(
 date_time = datetime.datetime.now().timestamp()
 logger.info("timestamp generated: %s", date_time)
 
-df = glue_session.spark_session.createDataFrame(
+df = glue_session.get_spark_session().createDataFrame(
     [
         [2, 1, "not b"],
         [3, 1, "c"],

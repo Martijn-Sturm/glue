@@ -31,7 +31,7 @@ SCHEMA = spark_types.StructType(
 
 date_time = datetime.datetime.now()
 
-df = glue_session.spark_session.createDataFrame(
+df = glue_session.get_spark_session().createDataFrame(
     [
         [1, 1, "a"],
         [2, 1, "b"],
