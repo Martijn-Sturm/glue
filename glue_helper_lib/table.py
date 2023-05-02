@@ -56,3 +56,8 @@ class ParquetTable:
             partitionBy=self._partition_columns,
             compression=self._compression,
         )
+
+    def read(
+        self, spark_session: pyspark.sql.SparkSession
+    ) -> pyspark.sql.DataFrame:
+        return spark_session.read.parquet(str(self._storage_location))
