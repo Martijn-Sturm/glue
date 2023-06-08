@@ -31,17 +31,17 @@ class DemoHudiUpsertStack(cdk.Stack):
             job_arguments=job_arguments,
         )
 
-        job.HudiJobConstruct(
-            self,
-            "upsert-table",
-            glue_bucket=glue_bucket,
-            job_script_filename="upsert_table.py",
-            source_bucket_access_configurations=[],
-            target_bucket_access_configurations=[
-                BucketAccessConfiguration(target_bucket.bucket_arn)
-            ],
-            job_arguments=job_arguments,
-        )
+        # job.HudiJobConstruct(
+        #     self,
+        #     "upsert-table",
+        #     glue_bucket=glue_bucket,
+        #     job_script_filename="upsert_table.py",
+        #     source_bucket_access_configurations=[],
+        #     target_bucket_access_configurations=[
+        #         BucketAccessConfiguration(target_bucket.bucket_arn)
+        #     ],
+        #     job_arguments=job_arguments,
+        # )
 
         # local_lib_wheel_path = Path(
         #     "libs/demo_lib/dist/demo_lib-0.1.0-py3-none-any.whl"

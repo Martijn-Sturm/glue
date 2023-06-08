@@ -2,7 +2,7 @@ import pyspark.sql.types as spark_types
 import pyspark.sql.functions as spark_funcs
 from glue_helper_lib.hudi.table import (
     HudiGlueTable,
-    HudiTableArguments,
+    WriteHudiTableArguments,
     Partitioning,
     WriteMode,
 )
@@ -68,21 +68,20 @@ catalog = GlueCatalogArguments(
     database=job_arguments.database_name, table=job_arguments.table_name
 )
 
-demo_table = HudiGlueTable(
-    HudiTableArguments(
-        storage_location=StorageLocation(table_uri),
-        catalog=catalog,
-        index_type=IndexType.GLOBAL_SIMPLE,
-        table_type=TableType.COPY_ON_WRITE,
-        record_key_colums=["id1", "id2"],
-        precombine_column=timestamp_colname,
-        partitioning=Partitioning(None, False),
-    )
+demo_table = HudiGlueTable(storage_location=StorageLocation(table_uri))
+
+write_args = WriteHudiTableArguments(
+    catalog=catalog,
+    index_type=IndexType.GLOBAL_SIMPLE,
+    table_type=TableType.COPY_ON_WRITE,
+    record_key_colums=["id1", "id2"],
+    precombine_column=timestamp_colname,
+    partitioning=Partitioning(None, False),
+    write_mode=WriteMode.UPSERT,
 )
 
-writemode = WriteMode.UPSERT
 
-logger.info("going to write dataframe with writemode: %s", writemode)
-demo_table.write(df, writemode)
+logger.info("going to write dataframe with write args: %s", write_args)
+demo_table.write(df, write_args)
 
 logger.info("written dataframe")

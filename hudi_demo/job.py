@@ -52,7 +52,7 @@ class HudiJobConstruct(Construct):
                     arguments.PipInstallablePackage(
                         "glue-helper-lib",
                         version_specifier=arguments.VersionSpecifier.MATCH,
-                        version_value="0.2.0",
+                        version_value="0.4.0",
                     )
                 ],
             ),

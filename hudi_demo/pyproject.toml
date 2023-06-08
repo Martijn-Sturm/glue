@@ -12,8 +12,8 @@ constructs = "^10.2.11"
 datalake-cdk = { git = "https://github.com/Martijn-Sturm/datalake-lib.git", subdirectory = "datalake_cdk" }
 
 [tool.poetry.group.dev.dependencies]
-poetry = "^1.4.2"
-glue-helper-lib = "^0.2.0"
+poetry = "^1.5.1"
+glue-helper-lib = "^0.3.0"
 pyspark = "^3.4.0"
 
 [build-system]
