@@ -18,7 +18,7 @@ class SparkGlueSession:
     def __init__(self) -> None:
         self._spark_context = SparkContext()
         self._glue_context = GlueContext(self._spark_context)
-        self._spark_session = self._glue_context.spark_session
+        self._spark_session: SparkSession = self._glue_context.spark_session
 
     def get_spark_session(self):
         return self._spark_session
