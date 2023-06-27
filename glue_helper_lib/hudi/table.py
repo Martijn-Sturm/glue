@@ -8,7 +8,7 @@ import enum
 
 @dataclasses.dataclass
 class Partitioning:
-    partition_column: typing.Optional[str]
+    partition_column: str
     datetime: typing.Optional[config.DatetimePartitioning]
 
 
@@ -24,7 +24,7 @@ class WriteHudiTableArguments:
     table_type: config.TableType
     record_key_colums: typing.List[str]
     precombine_column: str
-    partitioning: Partitioning
+    partitioning: typing.Optional[Partitioning]
     write_mode: WriteMode
 
 
@@ -38,16 +38,25 @@ class HudiGlueTable:
         self._storage_location = storage_location
 
     def _get_hudi_config(self, write_args: WriteHudiTableArguments):
+        if not write_args.partitioning:
+            datetime_partitioning = None
+            partition_key_column_name = None
+        else:
+            datetime_partitioning = write_args.partitioning.datetime
+            partition_key_column_name = (
+                write_args.partitioning.partition_column
+            )
+
         return config.get_hudi_options(
             database_name=write_args.catalog.database,
             table_name=write_args.catalog.table,
             hudi_table_path=str(self._storage_location),
             table_type=write_args.table_type,
-            datetime_partitioning=write_args.partitioning.datetime,
+            datetime_partitioning=datetime_partitioning,
             index_type=write_args.index_type,
             record_key_columns=write_args.record_key_colums,
             precombine_column_name=write_args.precombine_column,
-            partition_key_column_name=write_args.partitioning.partition_column,
+            partition_key_column_name=partition_key_column_name,
         )
 
     def write(
