@@ -1,5 +1,6 @@
 import enum
 import typing
+from dataclasses import dataclass
 
 
 class TableType(enum.Enum):
@@ -83,24 +84,29 @@ def get_keygenerator_class(
         )
 
 
-OUTPUT_DATE_FORMAT = "yyyyMMdd"
-ISO_INPUT_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-
-
 def get_keygenerator_class_name(key_generator: KeyGenerator):
     return f"org.apache.hudi.keygen.{key_generator.value}"
 
 
-def get_additional_options_for_datetime_keygen(partitioned_on_datetime: bool):
+@dataclass
+class DatetimePartitioning:
+    input_date_format: str = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+    timezone: str = "UTC"
+    output_date_format: str = "yyyyMMdd"
+
+
+def get_additional_options_for_datetime_keygen(
+    datetime_partitioning: typing.Optional[DatetimePartitioning],
+):
     # https://hudi.apache.org/blog/2021/02/13/hudi-key-generators/#timestampbasedkeygenerator
-    if partitioned_on_datetime:
+    if datetime_partitioning:
         return {
             "hoodie.deltastreamer.keygen.timebased.timestamp.type": "DATE_STRING",
-            "hoodie.deltastreamer.keygen.timebased.input.dateformat": ISO_INPUT_FORMAT,
+            "hoodie.deltastreamer.keygen.timebased.input.dateformat": datetime_partitioning.input_date_format,
             "hoodie.deltastreamer.keygen.timebased.input.dateformat.list.delimiter.regex": "",  # noqa: E501
             "hoodie.deltastreamer.keygen.timebased.input.timezone": "",
-            "hoodie.deltastreamer.keygen.timebased.output.dateformat": OUTPUT_DATE_FORMAT,  # noqa: E501
-            "hoodie.deltastreamer.keygen.timebased.timezone": "UTC",
+            "hoodie.deltastreamer.keygen.timebased.output.dateformat": datetime_partitioning.output_date_format,  # noqa: E501
+            "hoodie.deltastreamer.keygen.timebased.timezone": datetime_partitioning.timezone,
         }
     else:
         return {}
@@ -218,7 +224,7 @@ def get_hudi_options(
     database_name: str,
     table_name: str,
     table_type: TableType,
-    partitioned_on_datetime: bool,
+    datetime_partitioning: typing.Optional[DatetimePartitioning],
     index_type: IndexType,
     record_key_columns: typing.List[str],
     precombine_column_name: str,
@@ -230,7 +236,7 @@ def get_hudi_options(
     key_generator_class = get_keygenerator_class(
         len(record_key_columns),
         True if partition_key_column_name else False,
-        partitioned_on_datetime,
+        True if datetime_partitioning else False,
     )
     options: typing.Dict[str, str] = {
         **fixed_hudi_options,
@@ -252,10 +258,10 @@ def get_hudi_options(
         **get_index_type_option(index_type),
         **get_partitioning_options(
             partition_key_column_name,
-            partitioned_on_datetime,
+            True if datetime_partitioning else False,
             key_generator_class,
         ),
-        **get_additional_options_for_datetime_keygen(partitioned_on_datetime),
+        **get_additional_options_for_datetime_keygen(datetime_partitioning),
     }
 
     return options
