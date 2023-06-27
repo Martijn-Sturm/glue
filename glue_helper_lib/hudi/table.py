@@ -9,7 +9,7 @@ import enum
 @dataclasses.dataclass
 class Partitioning:
     partition_column: typing.Optional[str]
-    is_datetime: bool
+    datetime: typing.Optional[config.DatetimePartitioning]
 
 
 class WriteMode(enum.Enum):
@@ -43,11 +43,11 @@ class HudiGlueTable:
             table_name=write_args.catalog.table,
             hudi_table_path=str(self._storage_location),
             table_type=write_args.table_type,
+            datetime_partitioning=write_args.partitioning.datetime,
             index_type=write_args.index_type,
             record_key_columns=write_args.record_key_colums,
             precombine_column_name=write_args.precombine_column,
             partition_key_column_name=write_args.partitioning.partition_column,
-            partitioned_on_datetime=write_args.partitioning.is_datetime,
         )
 
     def write(
