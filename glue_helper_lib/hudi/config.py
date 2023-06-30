@@ -63,7 +63,7 @@ def get_keygenerator_class(
         return KeyGenerator.COMPLEX
     elif n_record_key_columns > 1 and not partitioned_on_datetime:
         return KeyGenerator.COMPLEX
-    elif n_record_key_columns > 1 and partitioning and partitioned_on_datetime:
+    elif partitioning and partitioned_on_datetime:
         return KeyGenerator.CUSTOM
     else:
         raise KeyGeneratorNotKnownException(
