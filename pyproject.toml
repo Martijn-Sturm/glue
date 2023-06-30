@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "glue-helper-lib"
-version = "0.5.3"
+version = "0.5.4"
 description = "A library containing multiple helper and utility functionalities for AWS Glue"
 authors = ["Martijn Sturm <martijn.sturm@gmail.com>"]
 license = "MIT"
