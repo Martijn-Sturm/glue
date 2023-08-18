@@ -4,9 +4,24 @@ import sys
 import dataclasses
 
 
+def parse_if_defined(
+    arg_key: str,
+    value_to_be_parsed: str,
+    parsing_funs: typing.Optional[typing.Dict[str, typing.Callable]],
+):
+    if not parsing_funs:
+        return value_to_be_parsed
+
+    try:
+        return parsing_funs[arg_key](value_to_be_parsed)
+    except KeyError:
+        return value_to_be_parsed
+
+
 def parse_arguments_to_dict(
     custom_argument_keys: typing.Sequence[str],
     builtin_argument_keys: typing.Optional[typing.Sequence[str]] = None,
+    parsing_funs: typing.Optional[typing.Dict[str, typing.Callable]] = None,
 ):
     args = getResolvedOptions(sys.argv, custom_argument_keys)
     all_argument_keys = (
@@ -14,7 +29,10 @@ def parse_arguments_to_dict(
         if builtin_argument_keys
         else custom_argument_keys
     )
-    return {key: args[key] for key in all_argument_keys}
+    return {
+        key: parse_if_defined(key, args[key], parsing_funs)
+        for key in all_argument_keys
+    }
 
 
 class Arguments(typing.Protocol):
@@ -28,7 +46,7 @@ class Arguments(typing.Protocol):
     __dataclass_fields__: typing.ClassVar[typing.Dict]
 
     @classmethod
-    def from_dict(cls, dict: typing.Dict[str, str]):
+    def from_dict(cls, dict: typing.Dict[str, typing.Any]):
         return cls(**dict)
 
     @classmethod
@@ -45,10 +63,16 @@ class Arguments(typing.Protocol):
         return [field.name for field in dataclasses.fields(cls)]
 
     @classmethod
+    def parse_args_funs(cls):
+        return None
+
+    @classmethod
     def from_glue_arguments(cls):
         return cls.from_dict(
             parse_arguments_to_dict(
-                cls._field_names(), cls._get_builtin_keys()
+                cls._field_names(),
+                cls._get_builtin_keys(),
+                cls.parse_args_funs(),
             )
         )
 
