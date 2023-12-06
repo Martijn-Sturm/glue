@@ -3,7 +3,6 @@ import pyspark.sql.functions as spark_funcs
 from glue_helper_lib.hudi.table import (
     HudiGlueTable,
     WriteHudiTableArguments,
-    Partitioning,
     WriteMode,
 )
 from glue_helper_lib.hudi.config import IndexType, TableType
@@ -76,7 +75,7 @@ write_args = WriteHudiTableArguments(
     table_type=TableType.COPY_ON_WRITE,
     record_key_colums=["id1", "id2"],
     precombine_column=timestamp_colname,
-    partitioning=Partitioning(None, False),
+    partitioning=None,
     write_mode=WriteMode.UPSERT,
 )
 
